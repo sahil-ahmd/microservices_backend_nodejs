@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon --exec npx tsx src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +29,9 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.5.0",
     "@types/pg": "^8.20.0",
-    "prisma": "^7.5.0"
+    "nodemon": "^3.1.14",
+    "prisma": "^7.5.0",
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.21.0"
   }
 }
