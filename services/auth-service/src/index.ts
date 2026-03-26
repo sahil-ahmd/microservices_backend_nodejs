@@ -1,10 +1,9 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import dotenv from "dotenv";
+import authRoutes from "./routes";
 
-// load env variables
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -16,6 +15,9 @@ app.use(helmet());
 // Parse JSON bodies
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
+
+// API routes
+app.use("/auth", authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Auth service is running on port ${PORT}`);

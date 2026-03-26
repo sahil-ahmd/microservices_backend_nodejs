@@ -1,9 +1,9 @@
 import prisma from "./database";
 import bcrypt from "bcryptjs";
 
-import { AuthTokens, JWTPayload } from "@shared/types";
+import { AuthTokens, JWTPayload } from "../../../shared/types";
 import jwt, { SignOptions } from "jsonwebtoken";
-import { createServiceError } from "@shared/utils";
+import { createServiceError } from "../../../shared/utils";
 import { StringValue } from "ms";
 
 export class AuthService {
@@ -14,8 +14,8 @@ export class AuthService {
   private readonly bcryptRounds: number;
 
   constructor() {
-    this.jwtSecret = process.env.JWT_SECRET!;
-    this.jwtRefereshSecret = process.env.JWT_REFRESH_SECRET!;
+    this.jwtSecret = process.env.JWT_SECRET || "";
+    this.jwtRefereshSecret = process.env.JWT_REFRESH_SECRET || "";
     this.jwtExpiresIn = process.env.JWT_EXPIRES_IN || "15m";
     this.jwtRefreshExpiresIn = process.env.JWT_REFRESH_EXPIRES_IN || "7d";
     this.bcryptRounds = parseInt(process.env.BCRYPT_ROUNDS || "10", 10);
