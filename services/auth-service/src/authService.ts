@@ -1,7 +1,7 @@
 import prisma from "./database";
 import bcrypt from "bcryptjs";
 
-import { AuthTokens, JWTPayload } from "../../../shared/types";
+import { AuthTokens, JWTPayload, ServiceError } from "../../../shared/types";
 import jwt, { SignOptions } from "jsonwebtoken";
 import { createServiceError } from "../../../shared/utils";
 import { StringValue } from "ms";
@@ -96,6 +96,44 @@ export class AuthService {
         throw createServiceError("Invalid token", 401);
       }
       throw createServiceError("Token validation failed", 500, error);
+    }
+  }
+
+  async refreshToken(refreshToken: string): Promise<AuthTokens> {
+    try {
+      // verify the refresh token
+      const decoded = jwt.verify(
+        refreshToken,
+        this.jwtRefereshSecret
+      ) as JWTPayload;
+
+      // check if the refresh token exists in the database
+      const storedToken = await prisma.refreshToken.findUnique({
+        where: { token: refreshToken },
+        include: { user: true },
+      });
+
+      if (!storedToken || storedToken.expiresAt < new Date()) {
+        throw createServiceError("Invalid or expired refresh token", 401);
+      }
+
+      // generate new tokens
+      const tokens = await this.generateTokens(
+        storedToken.user.id,
+        storedToken.user.email
+      );
+
+      // delete the old refresh token
+      await prisma.refreshToken.delete({
+        where: { id: storedToken.id },
+      });
+
+      return tokens;
+    } catch (error) {
+      if (error instanceof ServiceError) {
+        throw error;
+      }
+      throw createServiceError("Invalid refresh token", 401, error);
     }
   }
 
