@@ -1,3 +1,5 @@
+import { logError, ServiceError } from "@shared/types";
+import { createErrorResponse } from "@shared/utils";
 import { Request, Response, NextFunction, RequestHandler } from "express";
 
 export function asyncHandler(
@@ -34,4 +36,24 @@ export function validateRequest(schema: any): RequestHandler {
     
     next();
   };
+}
+
+export function errorHandler(
+  error: ServiceError,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  logError(error, {
+    method: req.method,
+    url: req.url,
+    body: req.body,
+    params: req.params,
+    query: req.query,
+  });
+
+  const statusCode = error.statusCode || 500;
+  const message = error.message || "Internal Server Error";
+
+  res.status(statusCode).json(createErrorResponse(message));
 }
