@@ -21,7 +21,7 @@ export class AuthService {
     this.bcryptRounds = parseInt(process.env.BCRYPT_ROUNDS || "10", 10);
 
     if (!this.jwtSecret || !this.jwtRefereshSecret) {
-      throw new Error("JWT secrets are not defined in environment variable");
+      throw new Error("JWT secrets are not defined in environment variables");
     }
   }
 
@@ -32,7 +32,7 @@ export class AuthService {
     });
 
     if (existingUser) {
-      throw createServiceError("User already exists", 400);
+      throw createServiceError("User already exists", 409);
     }
 
     // Hash the password

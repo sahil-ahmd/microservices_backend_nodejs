@@ -1,3 +1,5 @@
+import { JWTPayload } from "../../../shared/types";
+
 // Mock environment variables
 process.env.JWT_SECRET = "test-jwt-secret-key-for-testing-only";
 process.env.JWT_REFRESH_SECRET = "test-jwt-refresh-secret-key-for-testing-only";

@@ -22,7 +22,7 @@
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "ignoreDeprecations": "5.0",
-    "types": ["node"],
+    "types": ["node", "jest"],
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
@@ -33,11 +33,11 @@
     "src/**/*",
     "prisma/**/*",
     "*.ts",
+    "tests/**/*.ts",
     "../../shared/**/*"
   ],
   "exclude": [
     "node_modules",
-    "dist",
-    "**/*.test.ts"
+    "dist"
   ]
 }
