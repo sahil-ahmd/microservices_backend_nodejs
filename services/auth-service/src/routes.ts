@@ -1,0 +1,21 @@
+import { Router } from "express";
+import * as authController from "./authController";
+import { validateRequest } from "../../../shared/middleware";
+import { loginSchema, refreshTokenSchema, registerSchema } from "./validation";
+
+const router = Router();
+
+// Public Routes
+router.post("/register", validateRequest(registerSchema), authController.register);
+router.post("/login", validateRequest(loginSchema), authController.login);
+router.post("/refresh", validateRequest(refreshTokenSchema), authController.refreshTokens);
+router.post("logout", validateRequest(refreshTokenSchema), authController.logout);
+
+// Token validation endpoint (for other services to validate tokens)
+router.post("/validate", authController.validateToken);
+
+// Protected routes
+router.get("/profile", authController.getProfile);
+router.delete("/profile", authController.deleteAccount);
+
+export default router;
